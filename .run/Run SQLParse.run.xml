@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run SQLParse" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="hr.fer.zemris.calcite.sqlparser.SQLParse" />
+    <module name="calcite-rewriter" />
+    <option name="PROGRAM_PARAMETERS" value="&quot;SELECT column1, column2 FROM tables WHERE column3 &gt; 0&quot;" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
