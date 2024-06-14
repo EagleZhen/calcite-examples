@@ -1,15 +1,15 @@
 package hr.fer.zemris.calcite.sql2rel;
 
-class Employee { // This class is used in CustomSchema.java
-    public final int id;
-    public final String name;
-    public final int deptno;
-    public final int salary;
+public class Employee { // This class is used in CustomSchema.java
+    public final int ID;
+    public final String NAME;
+    public final int DEPTNO;
+    public final int SALARY;
 
-    public Employee(int id, String name, int deptno, int salary) {
-        this.id = id;
-        this.name = name;
-        this.deptno = deptno;
-        this.salary = salary;
+    public Employee(int ID, String NAME, int DEPTNO, int SALARY) {
+        this.ID = ID;
+        this.NAME = NAME;
+        this.DEPTNO = DEPTNO;
+        this.SALARY = SALARY;
     }
 }
