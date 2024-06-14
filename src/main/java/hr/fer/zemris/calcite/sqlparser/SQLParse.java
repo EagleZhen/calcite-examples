@@ -13,21 +13,18 @@ import org.apache.calcite.sql.validate.SqlConformanceEnum;
 
 /**
  * Hello world!
- *
  */
-public class SQLParse 
-{
-    public static void main( String[] args ) throws SqlParseException
-    {
-	SqlParser sqlParser = SqlParser.create(new SourceStringReader(args[0]),
-                                            SqlParser.configBuilder()
-                                                     .setParserFactory(SqlParserImpl.FACTORY)
-                                                     .setQuoting(Quoting.DOUBLE_QUOTE)
-                                                     .setUnquotedCasing(Casing.TO_UPPER)
-                                                     .setQuotedCasing(Casing.UNCHANGED)
-                                                     .setConformance(SqlConformanceEnum.DEFAULT)
-                                                     .build());
-         SqlNode sqlNode = sqlParser.parseQuery();
-         System.out.println(sqlNode.toString());
+public class SQLParse {
+    public static void main(String[] args) throws SqlParseException {
+        SqlParser sqlParser = SqlParser.create(new SourceStringReader(args[0]),
+                SqlParser.configBuilder()
+                        .setParserFactory(SqlParserImpl.FACTORY)
+                        .setQuoting(Quoting.DOUBLE_QUOTE)
+                        .setUnquotedCasing(Casing.TO_UPPER)
+                        .setQuotedCasing(Casing.UNCHANGED)
+                        .setConformance(SqlConformanceEnum.DEFAULT)
+                        .build());
+        SqlNode sqlNode = sqlParser.parseQuery();
+        System.out.println(sqlNode.toString());
     }
 }
