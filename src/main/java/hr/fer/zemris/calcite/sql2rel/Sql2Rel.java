@@ -22,41 +22,46 @@ import org.apache.calcite.adapter.jdbc.JdbcSchema;
 
 import org.apache.calcite.plan.RelOptUtil;
 
-// Ovaj SQL upit radi: 'SELECT * FROM multidb."medinfo"'
+// This SQL query works: 'SELECT * FROM multidb."medinfo"'
 
-public class Sql2Rel 
-{
-    public static void main( String[] args ) throws Exception
-    {
+public class Sql2Rel {
+    public static void main(String[] args) throws Exception {
+        // Establish a connection to the database
         Connection connection = DriverManager.getConnection("jdbc:calcite:");
         CalciteConnection calciteConnection = connection.unwrap(CalciteConnection.class);
+
+        // Add a schema to the root schema
         SchemaPlus rootSchema = calciteConnection.getRootSchema();
         final DataSource ds = JdbcSchema.dataSource(
-                                             "jdbc:postgresql://localhost:5432/multidb",
-                                             "org.postgresql.Driver",
-                                             "postgres",
-                                             "");
+                "jdbc:postgresql://localhost:5432/multidb",
+                "org.postgresql.Driver",
+                "postgres",
+                "");
         rootSchema.add("MULTIDB", JdbcSchema.create(rootSchema, "MULTIDB", ds, null, null));
         System.out.println(rootSchema.toString());
 
-	FrameworkConfig config = Frameworks.newConfigBuilder()
-                                           .defaultSchema(rootSchema)
-                                           .build();
+        // Create a configuration for the planner, including the schema,
+        FrameworkConfig config = Frameworks.newConfigBuilder()
+                .defaultSchema(rootSchema)
+                .build();
 
-        // Ponasanje planner-a definira se konfiguracijom. U njoj
-        // se definiraju rulovi, sheme i sve ostalo.
+        // The behavior of the planner is defined by the configuration. Rules, schemes and everything else are defined in it.
         Planner planner = Frameworks.getPlanner(config);
 
+        // Input SQL query from the first command-line argument & parse it
         SqlNode sqlNode = planner.parse(new SourceStringReader(args[0]));
-        System.out.println(sqlNode.toString());
+        System.out.println("Parsed SQL query: " + sqlNode.toString());
 
+        // Validate the SQL query, i.e. whether syntactically correct and semantically valid.
         sqlNode = planner.validate(sqlNode);
+        System.out.println("Validated SQL query: " + sqlNode.toString());
 
+        // Convert the SQL query to a relational expression
         RelRoot relRoot = planner.rel(sqlNode);
-        System.out.println(relRoot.toString());
+        System.out.println("Relational expression: " + relRoot.toString());
 
+        // Project the relational expression
         RelNode relNode = relRoot.project();
-        System.out.println(RelOptUtil.toString(relNode));
-
+        System.out.println("Projected relational expression: " + RelOptUtil.toString(relNode));
     }
 }
