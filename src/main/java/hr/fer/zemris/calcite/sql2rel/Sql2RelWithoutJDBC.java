@@ -1,7 +1,5 @@
 package hr.fer.zemris.calcite.sql2rel;
 
-import org.apache.calcite.avatica.util.Casing;
-import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.adapter.java.ReflectiveSchema;
 
@@ -9,21 +7,14 @@ import org.apache.calcite.jdbc.CalciteConnection;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.RelRoot;
-import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParser;
-import org.apache.calcite.sql.parser.impl.SqlParserImpl;
-import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.apache.calcite.tools.FrameworkConfig;
 import org.apache.calcite.tools.Frameworks;
 import org.apache.calcite.tools.Planner;
 import org.apache.calcite.util.SourceStringReader;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
-
-// This SQL query works: 'SELECT * FROM multidb."medinfo"'
 
 public class Sql2RelWithoutJDBC {
     public static void main(String[] args) throws Exception {
@@ -34,16 +25,11 @@ public class Sql2RelWithoutJDBC {
         // Add the custom schema
         SchemaPlus rootSchema = calciteConnection.getRootSchema();
         rootSchema.add("CUSTOM_SCHEMA", new ReflectiveSchema(new CustomSchema()));
-        System.out.println(rootSchema.toString());
+        System.out.println("\nRoot schema:\n" + rootSchema);
 
         // Create a configuration for the planner, including the schema,
         FrameworkConfig config = Frameworks.newConfigBuilder()
                 .defaultSchema(rootSchema.getSubSchema("CUSTOM_SCHEMA"))
-//                .parserConfig(SqlParser.configBuilder()  // to configure how calcite handles the casing
-//                        .setQuoting(Quoting.DOUBLE_QUOTE)
-//                        .setUnquotedCasing(Casing.TO_LOWER)
-//                        .setQuotedCasing(Casing.UNCHANGED)
-//                        .build())
                 .build();
 
         // The behavior of the planner is defined by the configuration. Rules, schemes and everything else are defined in it.
