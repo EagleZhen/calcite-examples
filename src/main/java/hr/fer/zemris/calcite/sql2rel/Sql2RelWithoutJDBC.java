@@ -50,7 +50,7 @@ public class Sql2RelWithoutJDBC {
         Planner planner = Frameworks.getPlanner(config);
 
         // Use a sample SQL query
-        String sql = "SELECT name FROM emp WHERE salary > 10000";
+        String sql = args[0];
         System.out.println("\nSQL query:\n" + sql);
 
         SqlNode sqlNode = planner.parse(new SourceStringReader(sql));

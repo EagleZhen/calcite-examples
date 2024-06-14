@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Sql2RelWithoutJDBC" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="hr.fer.zemris.calcite.sql2rel.Sql2RelWithoutJDBC" />
+    <module name="calcite-rewriter" />
+    <option name="PROGRAM_PARAMETERS" value="&quot;SELECT name FROM emp WHERE salary &gt; 10000&quot;" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
