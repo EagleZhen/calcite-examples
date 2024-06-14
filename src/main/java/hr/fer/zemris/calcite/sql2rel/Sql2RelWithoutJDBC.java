@@ -1,5 +1,7 @@
 package hr.fer.zemris.calcite.sql2rel;
 
+import org.apache.calcite.avatica.util.Casing;
+import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.adapter.java.ReflectiveSchema;
 
@@ -9,6 +11,9 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.RelRoot;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.calcite.sql.parser.impl.SqlParserImpl;
+import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.apache.calcite.tools.FrameworkConfig;
 import org.apache.calcite.tools.Frameworks;
 import org.apache.calcite.tools.Planner;
@@ -34,26 +39,36 @@ public class Sql2RelWithoutJDBC {
         // Create a configuration for the planner, including the schema,
         FrameworkConfig config = Frameworks.newConfigBuilder()
                 .defaultSchema(rootSchema.getSubSchema("CUSTOM_SCHEMA"))
+//                .parserConfig(SqlParser.configBuilder()  // to configure how calcite handles the casing
+//                        .setQuoting(Quoting.DOUBLE_QUOTE)
+//                        .setUnquotedCasing(Casing.TO_LOWER)
+//                        .setQuotedCasing(Casing.UNCHANGED)
+//                        .build())
                 .build();
 
         // The behavior of the planner is defined by the configuration. Rules, schemes and everything else are defined in it.
         Planner planner = Frameworks.getPlanner(config);
 
         // Use a sample SQL query
-        String sql = "SELECT * FROM emp";
+        String sql = "SELECT name FROM emp WHERE salary > 10000";
+        System.out.println("\nSQL query:\n" + sql);
+
         SqlNode sqlNode = planner.parse(new SourceStringReader(sql));
-        System.out.println("Parsed SQL query: " + sqlNode.toString());
+        System.out.println("\nParsed SQL query:\n" + sqlNode.toString());
 
         // Validate the SQL query, i.e. whether syntactically correct and semantically valid.
         sqlNode = planner.validate(sqlNode);
-        System.out.println("Validated SQL query: " + sqlNode.toString());
+        System.out.println("\nValidated SQL query:\n" + sqlNode.toString());
 
         // Convert the SQL query to a relational expression
         RelRoot relRoot = planner.rel(sqlNode);
-        System.out.println("Relational expression: " + relRoot.toString());
+        System.out.println("\nRelational expression:\n" + relRoot.toString());
+
+        // Print the relational expression with hierarchy
+        System.out.println("\nRelational expression with hierarchy:\n" + RelOptUtil.toString(relRoot.rel));
 
         // Project the relational expression
         RelNode relNode = relRoot.project();
-        System.out.println("Projected relational expression: " + RelOptUtil.toString(relNode));
+        System.out.println("\nProjected relational expression:\n" + RelOptUtil.toString(relNode));
     }
 }
