@@ -9,9 +9,6 @@ import org.apache.calcite.util.SourceStringReader;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 
-/**
- * Hello world!
- */
 public class SQLParse {
     public static void main(String[] args) throws SqlParseException {
         SqlParser sqlParser = SqlParser.create(
